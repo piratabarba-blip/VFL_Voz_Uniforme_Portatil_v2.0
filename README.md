@@ -26,7 +26,7 @@ Se o VFL Voz Uniforme foi útil para você e quiser ajudar no desenvolvimento de
 
 ## Baixar a versão pronta
 
-Quando a versão 2.1 for publicada, baixe o arquivo **`VFL_Voz_Uniforme_Portatil_v2.1_GPU.zip`** na página de [Releases](../../releases/latest).
+Baixe o arquivo **`VFL_Voz_Uniforme_Portatil_v2.1_GPU.zip`** na página de [Releases](../../releases/latest).
 
 > Não execute o programa de dentro do ZIP. Extraia todo o conteúdo primeiro e mantenha a pasta `third_party` ao lado do executável.
 
@@ -69,6 +69,10 @@ O arquivo final recebe, por padrão, o sufixo `_audio_melhorado.mp4`.
 - não requer instalação de Python, FFmpeg ou do modelo de IA;
 - GPU NVIDIA com driver atualizado é recomendada; RTX 3060, RTX 4090 e modelos compatíveis são detectados automaticamente;
 - sem uma GPU NVIDIA compatível, a separação continua funcionando pelo processador, porém mais lentamente.
+
+## Desempenho observado
+
+Em um vídeo de aproximadamente 4 horas, usando Ryzen 9 7950X e RTX 4090, o mesmo processamento caiu de **1h40min12s** na versão por CPU para **19min57s** na versão 2.1 GPU: cerca de **5 vezes mais rápido**, com redução aproximada de **80%** no tempo total. O resultado varia conforme o vídeo, a placa de vídeo e o restante do computador.
 
 ## Observações
 
