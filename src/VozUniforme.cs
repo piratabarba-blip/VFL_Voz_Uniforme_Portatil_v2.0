@@ -7,14 +7,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 [assembly: AssemblyTitle("VFL Voz Uniforme")]
 [assembly: AssemblyDescription("Separacao por IA, limpeza e nivelamento de audio para videos")]
 [assembly: AssemblyCompany("VFL")]
 [assembly: AssemblyProduct("VFL Voz Uniforme")]
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion("2.1.0.0")]
+[assembly: AssemblyFileVersion("2.1.0.0")]
 
 namespace VozUniformeApp
 {
@@ -99,7 +100,7 @@ namespace VozUniformeApp
 
         private void BuildInterface()
         {
-            Text = "VFL Voz Uniforme 2.0 - Audio com IA";
+            Text = "VFL Voz Uniforme 2.1 - Audio com IA acelerada";
             try { Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); } catch { }
             ClientSize = new Size(900, 600);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -126,7 +127,7 @@ namespace VozUniformeApp
             header.Controls.Add(logo);
             header.Controls.Add(MakeLabel("VFL Voz Uniforme", new Point(101, 18), new Size(420, 42), colorText, 22f, FontStyle.Bold));
             header.Controls.Add(MakeLabel("Separe voz e musica com IA, limpe as falas e preserve o video.", new Point(104, 59), new Size(560, 25), colorMuted, 10f, FontStyle.Regular));
-            Label version = MakeLabel("IA LOCAL  |  v2.0", new Point(710, 35), new Size(160, 25), colorMuted, 9f, FontStyle.Regular);
+            Label version = MakeLabel("GPU AUTO  |  v2.1", new Point(710, 35), new Size(160, 25), colorMuted, 9f, FontStyle.Regular);
             version.TextAlign = ContentAlignment.MiddleRight;
             header.Controls.Add(version);
 
@@ -441,19 +442,23 @@ namespace VozUniformeApp
             process.ErrorDataReceived += delegate(object errorSender, DataReceivedEventArgs errorEvent)
             {
                 if (errorEvent.Data == null) return;
-                lock (processErrors) processErrors.AppendLine(errorEvent.Data);
+                HandleProcessLine(errorEvent.Data);
             };
             if (captureOutput)
             {
                 process.OutputDataReceived += delegate(object outputSender, DataReceivedEventArgs outputEvent)
                 {
                     if (outputEvent.Data == null) return;
-                    lock (processErrors) processErrors.AppendLine(outputEvent.Data);
+                    HandleProcessLine(outputEvent.Data);
                 };
             }
             try
             {
                 process.Start();
+                if (String.Equals(fileName, aiPythonPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    try { process.PriorityClass = ProcessPriorityClass.BelowNormal; } catch { }
+                }
                 process.BeginErrorReadLine();
                 if (captureOutput) process.BeginOutputReadLine();
             }
@@ -463,6 +468,46 @@ namespace VozUniformeApp
                 process = null;
                 FinishWithError(ex.Message);
             }
+        }
+
+        private void HandleProcessLine(string line)
+        {
+            lock (processErrors) processErrors.AppendLine(line);
+            if (processingStage != "Separate" || IsDisposed) return;
+
+            string statusText = null;
+            int parsedProgress = -1;
+            if (line.StartsWith("VFL_DEVICE=", StringComparison.Ordinal))
+            {
+                statusText = "Etapa 2/3: " + line.Substring("VFL_DEVICE=".Length);
+            }
+            else
+            {
+                Match chunk = Regex.Match(line, @"Processing chunk\s+(\d+)/(\d+)", RegexOptions.IgnoreCase);
+                int current;
+                int total;
+                if (chunk.Success && Int32.TryParse(chunk.Groups[1].Value, out current) &&
+                    Int32.TryParse(chunk.Groups[2].Value, out total) && total > 0)
+                {
+                    parsedProgress = 15 + (int)Math.Round(((current - 1.0) / total) * 60.0);
+                    statusText = "Etapa 2/3: separando com IA - bloco " + current + "/" + total;
+                }
+            }
+
+            if (statusText == null) return;
+            try
+            {
+                BeginInvoke(new Action(delegate
+                {
+                    if (parsedProgress >= 0)
+                    {
+                        progressPercent = Math.Max(progressPercent, parsedProgress);
+                        SetProgress(progressPercent);
+                    }
+                    SetStatus(statusText, "Processing");
+                }));
+            }
+            catch { }
         }
 
         private bool TryReadDuration(string input, out double parsedDuration, out string error)
@@ -726,7 +771,7 @@ namespace VozUniformeApp
 
         private ProcessStartInfo CreateProcessInfo(string fileName, IEnumerable<string> arguments, bool redirectOutput, bool redirectError)
         {
-            return new ProcessStartInfo
+            ProcessStartInfo info = new ProcessStartInfo
             {
                 FileName = fileName,
                 Arguments = String.Join(" ", arguments.Select(QuoteArgument).ToArray()),
@@ -736,6 +781,15 @@ namespace VozUniformeApp
                 RedirectStandardOutput = redirectOutput,
                 RedirectStandardError = redirectError
             };
+            if (String.Equals(fileName, aiPythonPath, StringComparison.OrdinalIgnoreCase))
+            {
+                int balancedThreads = Math.Max(2, (int)Math.Floor(Environment.ProcessorCount * 0.80));
+                info.EnvironmentVariables["OMP_NUM_THREADS"] = balancedThreads.ToString(CultureInfo.InvariantCulture);
+                info.EnvironmentVariables["MKL_NUM_THREADS"] = balancedThreads.ToString(CultureInfo.InvariantCulture);
+                info.EnvironmentVariables["NUMEXPR_MAX_THREADS"] = balancedThreads.ToString(CultureInfo.InvariantCulture);
+                info.EnvironmentVariables["VFL_RESOURCE_PROFILE"] = "balanced";
+            }
+            return info;
         }
 
         private static string QuoteArgument(string value)
