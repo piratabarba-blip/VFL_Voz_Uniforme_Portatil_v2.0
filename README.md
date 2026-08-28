@@ -64,6 +64,10 @@ O arquivo final recebe, por padrão, o sufixo `_audio_melhorado.mp4`.
 
 O pacote portátil inclui componentes de terceiros que não são mantidos no histórico deste repositório. Consulte [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) para os créditos e projetos utilizados.
 
+## Licença de uso
+
+O VFL Voz Uniforme é disponibilizado para **uso gratuito e não comercial**. É permitido usar, estudar, modificar e compartilhar gratuitamente com os devidos créditos. Não é permitido vender, cobrar pelo acesso, incorporar em produto ou serviço pago, nem remover a autoria. Leia os termos completos em [LICENSE.md](LICENSE.md).
+
 ## Versão
 
 **VFL Voz Uniforme 2.0.0** — feito para deixar todas as vozes no mesmo nível, com poucos cliques.

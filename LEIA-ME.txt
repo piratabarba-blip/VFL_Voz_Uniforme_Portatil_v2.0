@@ -30,3 +30,8 @@ O programa foi criado para Windows 10/11 de 64 bits.
 CREDITOS
 Separacao baseada no projeto open-source Audio Separator/UVR e no modelo
 UVR-MDX-NET-Inst_HQ_3. Consulte as licencas incluidas na pasta third_party.
+
+LICENCA DE USO
+Uso gratuito e nao comercial. Nao e permitido vender, cobrar pelo acesso,
+incorporar em produto ou servico pago, nem remover os creditos do projeto.
+Consulte LICENSE.md no repositorio oficial para conhecer todos os termos.
