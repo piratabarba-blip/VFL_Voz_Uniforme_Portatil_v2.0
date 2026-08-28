@@ -1,0 +1,21 @@
+# Pacote portátil e artefatos de compilação
+*.zip
+*.7z
+*.rar
+*.exe
+*.dll
+*.pdb
+bin/
+obj/
+third_party/
+
+# Arquivos temporários
+__pycache__/
+*.py[cod]
+*.tmp
+*.log
+.vs/
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

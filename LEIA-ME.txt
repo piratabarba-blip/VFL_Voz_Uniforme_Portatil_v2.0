@@ -1,0 +1,32 @@
+VFL VOZ UNIFORME - VERSAO 2.0 COM IA
+
+COMO ABRIR
+1. Extraia todo o conteudo do arquivo ZIP.
+2. Abra a pasta VFL2 criada pela extracao.
+3. Execute VFLVozUniforme.exe.
+
+MODOS DE MUSICA
+- Video somente com voz: rapido, sem separacao por IA.
+- Manter musica (suave): trata a faixa completa sem separar.
+- Deixar musica baixa - IA: separa voz e musica e remonta com a musica em 15%.
+- Remover musica - IA: separa as faixas e usa somente a voz tratada.
+
+Nos modos IA o processamento leva mais tempo. A barra mostra as etapas:
+preparacao, separacao por IA e finalizacao do video.
+
+IMPORTANTE
+- Nao execute o programa diretamente de dentro do ZIP.
+- Mantenha a pasta third_party ao lado do executavel.
+- O video original nunca e alterado.
+- Nao e necessario instalar Python, PowerShell, FFmpeg nem baixar o modelo.
+- A IA funciona totalmente no computador; o video nao e enviado para a internet.
+
+SE O WINDOWS EXIBIR UM AVISO
+Clique com o botao direito no ZIP, abra Propriedades, marque Desbloquear
+(se essa opcao aparecer), clique em Aplicar e extraia novamente.
+
+O programa foi criado para Windows 10/11 de 64 bits.
+
+CREDITOS
+Separacao baseada no projeto open-source Audio Separator/UVR e no modelo
+UVR-MDX-NET-Inst_HQ_3. Consulte as licencas incluidas na pasta third_party.
