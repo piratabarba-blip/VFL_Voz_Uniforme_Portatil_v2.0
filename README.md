@@ -6,6 +6,12 @@
 
 Aplicativo portátil para Windows que uniformiza o volume das falas, reduz ruídos e pode separar voz e música com inteligência artificial. Todo o processamento acontece no próprio computador: nenhum vídeo é enviado para a internet.
 
+## Interface do programa
+
+<p align="center">
+  <img src="assets/interface-vfl-voz-uniforme.png" alt="Interface do VFL Voz Uniforme 2.0" width="900">
+</p>
+
 ## Apoie o projeto
 
 Se o VFL Voz Uniforme foi útil para você e quiser ajudar no desenvolvimento de novas versões, apoie o projeto pelo Apoia.se:
