@@ -134,9 +134,11 @@ namespace VozUniformeApp
             left.Controls.Add(MakeLabel("◆  ENTRADA E DESTINO", new Point(20, 16), new Size(270, 24), colorText, 9f, FontStyle.Bold));
             left.Controls.Add(MakeLabel("VIDEO DE ENTRADA", new Point(20, 55), new Size(270, 20), colorMuted, 8f, FontStyle.Bold));
             inputBox = new TextBox { Location = new Point(20, 78), Size = new Size(205, 28), BackColor = colorInput, ForeColor = colorText, BorderStyle = BorderStyle.FixedSingle };
+            RoundControl(inputBox, 6);
             inputButton = MakeButton("PROCURAR", new Point(232, 75), 68, colorSecondary); inputButton.Height = 34; left.Controls.Add(inputBox); left.Controls.Add(inputButton);
             left.Controls.Add(MakeLabel("SALVAR RESULTADO EM", new Point(20, 125), new Size(270, 20), colorMuted, 8f, FontStyle.Bold));
             outputBox = new TextBox { Location = new Point(20, 148), Size = new Size(205, 28), BackColor = colorInput, ForeColor = colorText, BorderStyle = BorderStyle.FixedSingle };
+            RoundControl(outputBox, 6);
             outputButton = MakeButton("PROCURAR", new Point(232, 145), 68, colorSecondary); outputButton.Height = 34; left.Controls.Add(outputBox); left.Controls.Add(outputButton);
             left.Controls.Add(new Panel { Location = new Point(20, 198), Size = new Size(280, 1), BackColor = colorBorder });
             left.Controls.Add(MakeLabel("INTENSIDADE DA LIMPEZA", new Point(20, 220), new Size(280, 20), colorMuted, 8f, FontStyle.Bold));
@@ -153,6 +155,7 @@ namespace VozUniformeApp
             center.Controls.Add(MakeLabel("LINHA DE PROGRESSO", new Point(24, 104), new Size(220, 22), colorMuted, 8f, FontStyle.Bold));
             progressTrack = new Panel { Location = new Point(24, 140), Size = new Size(496, 10), BackColor = colorInput };
             progressFill = new Panel { Location = new Point(0, 0), Size = new Size(0, 10), BackColor = colorGreen }; progressTrack.Controls.Add(progressFill); center.Controls.Add(progressTrack);
+            RoundControl(progressTrack, 5);
             Label centerMessage = MakeLabel("PROCESSAMENTO LOCAL", new Point(24, 205), new Size(496, 40), Color.FromArgb(6, 182, 212), 16f, FontStyle.Bold); centerMessage.TextAlign = ContentAlignment.MiddleCenter; center.Controls.Add(centerMessage);
             Label centerHelp = MakeLabel("A separacao por IA, a limpeza, o nivelamento e a remontagem do video acontecem inteiramente neste computador.", new Point(70, 260), new Size(410, 90), colorMuted, 10f, FontStyle.Regular); centerHelp.TextAlign = ContentAlignment.MiddleCenter; center.Controls.Add(centerHelp);
 
@@ -270,6 +273,7 @@ namespace VozUniformeApp
             };
             combo.Items.AddRange(items);
             combo.SelectedIndex = selectedIndex;
+            RoundControl(combo, 6);
             return combo;
         }
 
@@ -285,6 +289,7 @@ namespace VozUniformeApp
                 BorderStyle = BorderStyle.FixedSingle,
                 Font = new Font("Segoe UI", 10f)
             };
+            RoundControl(box, 6);
             card.Controls.Add(box);
             button = MakeButton("Procurar", new Point(698, y + 21), 124, colorSecondary);
             button.Height = 34;
