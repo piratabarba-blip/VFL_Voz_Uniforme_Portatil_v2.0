@@ -122,7 +122,8 @@ namespace VozUniformeApp
                 logo.Controls.Add(new Label { Text = "V", Font = new Font("Segoe UI", 15f, FontStyle.Bold), ForeColor = Color.White, TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill });
                 header.Controls.Add(logo);
             }
-            header.Controls.Add(MakeLabel("VFL Voz Uniforme  •  v2.1", new Point(76, 18), new Size(360, 34), colorText, 14f, FontStyle.Bold));
+            header.Controls.Add(MakeLabel("VFL Voz Uniforme", new Point(76, 10), new Size(360, 30), colorText, 13f, FontStyle.Bold));
+            header.Controls.Add(MakeLabel("AUDIO COM IA  •  v2.1", new Point(76, 39), new Size(250, 19), colorAccent, 7f, FontStyle.Bold));
             header.Controls.Add(MakeLabel("Separe voz e musica com IA, limpe as falas e preserve o video.", new Point(455, 23), new Size(500, 25), colorMuted, 9f, FontStyle.Regular));
             Label version = MakeLabel("SUITE VFL  •  GPU AUTO", new Point(980, 22), new Size(180, 25), Color.FromArgb(6, 182, 212), 8f, FontStyle.Bold);
             version.TextAlign = ContentAlignment.MiddleRight;
@@ -230,7 +231,30 @@ namespace VozUniformeApp
                 Font = new Font("Segoe UI", 10f, FontStyle.Bold)
             };
             button.FlatAppearance.BorderSize = 0;
+            RoundControl(button, 10);
             return button;
+        }
+
+        private static void RoundControl(Control control, int radius)
+        {
+            Action update = delegate
+            {
+                if (control.Width < 2 || control.Height < 2) return;
+                int diameter = radius * 2;
+                using (System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath())
+                {
+                    path.AddArc(0, 0, diameter, diameter, 180, 90);
+                    path.AddArc(control.Width - diameter - 1, 0, diameter, diameter, 270, 90);
+                    path.AddArc(control.Width - diameter - 1, control.Height - diameter - 1, diameter, diameter, 0, 90);
+                    path.AddArc(0, control.Height - diameter - 1, diameter, diameter, 90, 90);
+                    path.CloseFigure();
+                    Region previous = control.Region;
+                    control.Region = new Region(path);
+                    if (previous != null) previous.Dispose();
+                }
+            };
+            update();
+            control.SizeChanged += delegate { update(); };
         }
 
         private ComboBox MakeCombo(Point location, Size size, string[] items, int selectedIndex)
