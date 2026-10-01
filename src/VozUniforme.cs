@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -21,9 +22,15 @@ namespace VozUniformeApp
 {
     internal static class Program
     {
+        private const string AppUserModelId = "VFL.VozUniforme";
+
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        private static extern int SetCurrentProcessExplicitAppUserModelID(string appId);
+
         [STAThread]
         private static void Main()
         {
+            SetCurrentProcessExplicitAppUserModelID(AppUserModelId);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
