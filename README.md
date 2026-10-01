@@ -32,6 +32,7 @@ Baixe o arquivo **`VFL_Voz_Uniforme_Portatil_v2.1_GPU.zip`** na página de [Rele
 
 ## Principais recursos
 
+- interface padronizada com a suíte VFL, cartões arredondados e identidade visual verde;
 - uniformiza falas baixas e altas;
 - reduz ruído contínuo e limpa frequências desnecessárias;
 - comprime a dinâmica, normaliza o volume em LUFS e limita picos;

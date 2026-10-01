@@ -40,15 +40,18 @@ namespace VozUniformeApp
     internal sealed class MainForm : Form
     {
         private readonly Color colorWindow = Color.FromArgb(14, 17, 23);
-        private readonly Color colorHeader = Color.FromArgb(21, 25, 34);
-        private readonly Color colorCard = Color.FromArgb(26, 32, 44);
-        private readonly Color colorInput = Color.FromArgb(34, 41, 56);
-        private readonly Color colorSecondary = Color.FromArgb(34, 41, 56);
-        private readonly Color colorBorder = Color.FromArgb(45, 55, 72);
+        private readonly Color colorHeader = Color.FromArgb(18, 22, 30);
+        private readonly Color colorCard = Color.FromArgb(25, 31, 43);
+        private readonly Color colorSurface = Color.FromArgb(20, 25, 35);
+        private readonly Color colorInput = Color.FromArgb(35, 43, 59);
+        private readonly Color colorSecondary = Color.FromArgb(40, 49, 67);
+        private readonly Color colorBorder = Color.FromArgb(48, 59, 78);
         private readonly Color colorText = Color.FromArgb(248, 250, 252);
         private readonly Color colorMuted = Color.FromArgb(148, 163, 184);
-        private readonly Color colorAccent = Color.FromArgb(226, 50, 68);
+        private readonly Color colorAccent = Color.FromArgb(16, 185, 129);
+        private readonly Color colorCyan = Color.FromArgb(6, 182, 212);
         private readonly Color colorGreen = Color.FromArgb(16, 185, 129);
+        private readonly Color colorDanger = Color.FromArgb(239, 68, 68);
         private readonly Color colorOrange = Color.FromArgb(245, 166, 35);
 
         private readonly string projectDir;
@@ -107,7 +110,7 @@ namespace VozUniformeApp
 
         private void BuildInterface()
         {
-            Text = "VFL Voz Uniforme 2.1 - Audio com IA acelerada";
+            Text = "VFL Voz Uniforme — Áudio com IA acelerada";
             try { Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); } catch { }
             ClientSize = new Size(1180, 720);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -118,64 +121,79 @@ namespace VozUniformeApp
             ForeColor = colorText;
             Font = new Font("Segoe UI", 10f);
 
-            Panel header = new Panel { Location = new Point(0, 0), Size = new Size(1180, 72), BackColor = colorHeader };
+            Panel header = new Panel { Location = new Point(0, 0), Size = new Size(1180, 78), BackColor = colorHeader };
             Controls.Add(header);
             string logoPath = Path.Combine(projectDir, "assets", "vfl-suite-logo.png");
             if (File.Exists(logoPath))
-                header.Controls.Add(new PictureBox { Location = new Point(18, 10), Size = new Size(48, 52), Image = Image.FromFile(logoPath), SizeMode = PictureBoxSizeMode.Zoom });
+                header.Controls.Add(new PictureBox { Location = new Point(22, 13), Size = new Size(48, 48), Image = Image.FromFile(logoPath), SizeMode = PictureBoxSizeMode.Zoom });
             else
             {
-                Panel logo = new Panel { Location = new Point(18, 10), Size = new Size(48, 52), BackColor = colorAccent };
+                Panel logo = new Panel { Location = new Point(22, 13), Size = new Size(48, 48), BackColor = colorAccent };
                 logo.Controls.Add(new Label { Text = "V", Font = new Font("Segoe UI", 15f, FontStyle.Bold), ForeColor = Color.White, TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill });
+                RoundControl(logo, 8);
                 header.Controls.Add(logo);
             }
-            header.Controls.Add(MakeLabel("VFL Voz Uniforme", new Point(76, 10), new Size(360, 30), colorText, 13f, FontStyle.Bold));
-            header.Controls.Add(MakeLabel("AUDIO COM IA  •  v2.1", new Point(76, 39), new Size(250, 19), colorAccent, 7f, FontStyle.Bold));
-            header.Controls.Add(MakeLabel("Separe voz e musica com IA, limpe as falas e preserve o video.", new Point(455, 23), new Size(500, 25), colorMuted, 9f, FontStyle.Regular));
-            Label version = MakeLabel("SUITE VFL  •  GPU AUTO", new Point(980, 22), new Size(180, 25), Color.FromArgb(6, 182, 212), 8f, FontStyle.Bold);
+            header.Controls.Add(MakeLabel("VFL Voz Uniforme", new Point(84, 10), new Size(430, 30), colorText, 14f, FontStyle.Bold));
+            header.Controls.Add(MakeLabel("Separe voz e música com IA, limpe as falas e preserve o vídeo.", new Point(84, 40), new Size(650, 22), colorMuted, 8.5f, FontStyle.Regular));
+            Label version = MakeLabel("ÁUDIO COM IA  •  GPU AUTO  |  v2.1", new Point(850, 25), new Size(290, 24), colorCyan, 7.5f, FontStyle.Bold);
             version.TextAlign = ContentAlignment.MiddleRight;
             header.Controls.Add(version);
+            header.Controls.Add(new Panel { Location = new Point(0, 76), Size = new Size(1180, 2), BackColor = colorAccent });
 
-            Panel left = new Panel { Location = new Point(0, 72), Size = new Size(320, 596), BackColor = colorCard };
+            Panel left = MakeCard(new Rectangle(18, 94, 326, 548));
             Controls.Add(left);
-            left.Controls.Add(MakeLabel("◆  ENTRADA E DESTINO", new Point(20, 16), new Size(270, 24), colorText, 9f, FontStyle.Bold));
-            left.Controls.Add(MakeLabel("VIDEO DE ENTRADA", new Point(20, 55), new Size(270, 20), colorMuted, 8f, FontStyle.Bold));
-            inputBox = new TextBox { Location = new Point(20, 78), Size = new Size(205, 28), BackColor = colorInput, ForeColor = colorText, BorderStyle = BorderStyle.FixedSingle };
+            left.Controls.Add(MakeLabel("◆  ENTRADA E DESTINO", new Point(22, 18), new Size(280, 24), colorText, 9f, FontStyle.Bold));
+            left.Controls.Add(MakeLabel("Escolha o vídeo original e onde salvar o resultado.", new Point(22, 44), new Size(280, 34), colorMuted, 8f, FontStyle.Regular));
+            left.Controls.Add(MakeLabel("VÍDEO DE ENTRADA", new Point(22, 94), new Size(280, 20), colorMuted, 7.5f, FontStyle.Bold));
+            inputBox = new TextBox { Location = new Point(22, 117), Size = new Size(204, 29), BackColor = colorInput, ForeColor = colorText, BorderStyle = BorderStyle.FixedSingle };
             RoundControl(inputBox, 6);
-            inputButton = MakeButton("PROCURAR", new Point(232, 75), 68, colorSecondary); inputButton.Height = 34; left.Controls.Add(inputBox); left.Controls.Add(inputButton);
-            left.Controls.Add(MakeLabel("SALVAR RESULTADO EM", new Point(20, 125), new Size(270, 20), colorMuted, 8f, FontStyle.Bold));
-            outputBox = new TextBox { Location = new Point(20, 148), Size = new Size(205, 28), BackColor = colorInput, ForeColor = colorText, BorderStyle = BorderStyle.FixedSingle };
+            inputButton = MakeButton("PROCURAR", new Point(234, 114), 70, colorSecondary); inputButton.Height = 35; inputButton.Font = new Font("Segoe UI Semibold", 7.5f); left.Controls.Add(inputBox); left.Controls.Add(inputButton);
+            left.Controls.Add(MakeLabel("SALVAR RESULTADO EM", new Point(22, 164), new Size(280, 20), colorMuted, 7.5f, FontStyle.Bold));
+            outputBox = new TextBox { Location = new Point(22, 187), Size = new Size(204, 29), BackColor = colorInput, ForeColor = colorText, BorderStyle = BorderStyle.FixedSingle };
             RoundControl(outputBox, 6);
-            outputButton = MakeButton("PROCURAR", new Point(232, 145), 68, colorSecondary); outputButton.Height = 34; left.Controls.Add(outputBox); left.Controls.Add(outputButton);
-            left.Controls.Add(new Panel { Location = new Point(20, 198), Size = new Size(280, 1), BackColor = colorBorder });
-            left.Controls.Add(MakeLabel("INTENSIDADE DA LIMPEZA", new Point(20, 220), new Size(280, 20), colorMuted, 8f, FontStyle.Bold));
-            profileBox = MakeCombo(new Point(20, 244), new Size(280, 30), new[] { "Leve", "Normal", "Forte" }, 1); left.Controls.Add(profileBox);
-            left.Controls.Add(MakeLabel("VOLUME FINAL", new Point(20, 292), new Size(280, 20), colorMuted, 8f, FontStyle.Bold));
-            lufsBox = MakeCombo(new Point(20, 316), new Size(280, 30), new[] { "-14 LUFS - YouTube", "-16 LUFS - Voz/Podcast", "-18 LUFS - Suave" }, 1); left.Controls.Add(lufsBox);
-            left.Controls.Add(MakeLabel("As configuracoes escolhidas sao aplicadas sem alterar o video original.", new Point(30, 390), new Size(260, 80), colorMuted, 8.5f, FontStyle.Regular));
+            outputButton = MakeButton("PROCURAR", new Point(234, 184), 70, colorSecondary); outputButton.Height = 35; outputButton.Font = new Font("Segoe UI Semibold", 7.5f); left.Controls.Add(outputBox); left.Controls.Add(outputButton);
+            left.Controls.Add(new Panel { Location = new Point(22, 242), Size = new Size(282, 1), BackColor = colorBorder });
+            left.Controls.Add(MakeLabel("AJUSTES DE ÁUDIO", new Point(22, 262), new Size(280, 20), colorText, 8f, FontStyle.Bold));
+            left.Controls.Add(MakeLabel("INTENSIDADE DA LIMPEZA", new Point(22, 300), new Size(280, 20), colorMuted, 7.5f, FontStyle.Bold));
+            profileBox = MakeCombo(new Point(22, 323), new Size(282, 31), new[] { "Leve", "Normal", "Forte" }, 1); left.Controls.Add(profileBox);
+            left.Controls.Add(MakeLabel("VOLUME FINAL", new Point(22, 376), new Size(280, 20), colorMuted, 7.5f, FontStyle.Bold));
+            lufsBox = MakeCombo(new Point(22, 399), new Size(282, 31), new[] { "-14 LUFS - YouTube", "-16 LUFS - Voz/Podcast", "-18 LUFS - Suave" }, 1); left.Controls.Add(lufsBox);
+            Panel safeNote = new Panel { Location = new Point(22, 462), Size = new Size(282, 62), BackColor = colorSurface };
+            RoundControl(safeNote, 10);
+            safeNote.Controls.Add(MakeLabel("✓  ORIGINAL PRESERVADO", new Point(12, 9), new Size(255, 18), colorGreen, 7.5f, FontStyle.Bold));
+            safeNote.Controls.Add(MakeLabel("As escolhas são aplicadas somente ao novo arquivo.", new Point(12, 30), new Size(255, 24), colorMuted, 7.5f, FontStyle.Regular));
+            left.Controls.Add(safeNote);
 
-            Panel center = new Panel { Location = new Point(320, 72), Size = new Size(550, 596), BackColor = colorWindow };
+            Panel center = MakeCard(new Rectangle(356, 94, 492, 548));
             Controls.Add(center);
-            center.Controls.Add(MakeLabel("PROCESSAMENTO DE AUDIO", new Point(24, 16), new Size(300, 24), colorText, 10f, FontStyle.Bold));
-            center.Controls.Add(MakeLabel("O andamento da limpeza e da IA aparece aqui em tempo real.", new Point(24, 45), new Size(490, 24), colorMuted, 8.5f, FontStyle.Regular));
-            timeLabel = MakeLabel("Tempo  00:00:00", new Point(300, 102), new Size(220, 25), colorMuted, 9f, FontStyle.Bold); timeLabel.TextAlign = ContentAlignment.MiddleRight; center.Controls.Add(timeLabel);
-            center.Controls.Add(MakeLabel("LINHA DE PROGRESSO", new Point(24, 104), new Size(220, 22), colorMuted, 8f, FontStyle.Bold));
-            progressTrack = new Panel { Location = new Point(24, 140), Size = new Size(496, 10), BackColor = colorInput };
+            center.Controls.Add(MakeLabel("PROCESSAMENTO DE ÁUDIO", new Point(24, 18), new Size(300, 24), colorText, 9f, FontStyle.Bold));
+            center.Controls.Add(MakeLabel("Acompanhe a limpeza, a IA e a remontagem em tempo real.", new Point(24, 44), new Size(440, 24), colorMuted, 8f, FontStyle.Regular));
+            Panel stage = new Panel { Location = new Point(24, 88), Size = new Size(444, 310), BackColor = colorSurface };
+            RoundControl(stage, 14);
+            stage.Controls.Add(MakeLabel("IA", new Point(189, 34), new Size(66, 28), colorAccent, 16f, FontStyle.Bold));
+            Label centerMessage = MakeLabel("PROCESSAMENTO LOCAL", new Point(40, 82), new Size(364, 36), colorCyan, 14f, FontStyle.Bold); centerMessage.TextAlign = ContentAlignment.MiddleCenter; stage.Controls.Add(centerMessage);
+            Label centerHelp = MakeLabel("Separação, limpeza, nivelamento e remontagem acontecem inteiramente neste computador.", new Point(54, 126), new Size(336, 62), colorMuted, 9f, FontStyle.Regular); centerHelp.TextAlign = ContentAlignment.MiddleCenter; stage.Controls.Add(centerHelp);
+            stage.Controls.Add(MakeLabel("PROGRESSO", new Point(24, 218), new Size(130, 20), colorMuted, 7.5f, FontStyle.Bold));
+            timeLabel = MakeLabel("Tempo  00:00:00", new Point(210, 214), new Size(210, 24), colorMuted, 8.5f, FontStyle.Bold); timeLabel.TextAlign = ContentAlignment.MiddleRight; stage.Controls.Add(timeLabel);
+            progressTrack = new Panel { Location = new Point(24, 252), Size = new Size(396, 10), BackColor = colorInput };
             progressFill = new Panel { Location = new Point(0, 0), Size = new Size(0, 10), BackColor = colorGreen }; progressTrack.Controls.Add(progressFill); center.Controls.Add(progressTrack);
             RoundControl(progressTrack, 5);
-            Label centerMessage = MakeLabel("PROCESSAMENTO LOCAL", new Point(24, 205), new Size(496, 40), Color.FromArgb(6, 182, 212), 16f, FontStyle.Bold); centerMessage.TextAlign = ContentAlignment.MiddleCenter; center.Controls.Add(centerMessage);
-            Label centerHelp = MakeLabel("A separacao por IA, a limpeza, o nivelamento e a remontagem do video acontecem inteiramente neste computador.", new Point(70, 260), new Size(410, 90), colorMuted, 10f, FontStyle.Regular); centerHelp.TextAlign = ContentAlignment.MiddleCenter; center.Controls.Add(centerHelp);
+            stage.Controls.Add(progressTrack);
+            center.Controls.Add(stage);
+            Label privacy = MakeLabel("🔒  Nenhum arquivo é enviado para a internet.", new Point(24, 430), new Size(444, 30), colorGreen, 8.5f, FontStyle.Bold); privacy.TextAlign = ContentAlignment.MiddleCenter; center.Controls.Add(privacy);
+            Label ready = MakeLabel("Selecione um vídeo para iniciar o tratamento.", new Point(24, 468), new Size(444, 36), colorMuted, 8.5f, FontStyle.Regular); ready.TextAlign = ContentAlignment.MiddleCenter; center.Controls.Add(ready);
 
-            Panel right = new Panel { Location = new Point(870, 72), Size = new Size(310, 596), BackColor = colorCard };
+            Panel right = MakeCard(new Rectangle(860, 94, 302, 548));
             Controls.Add(right);
-            right.Controls.Add(MakeLabel("↗  TRATAMENTO FINAL", new Point(20, 16), new Size(270, 24), colorText, 9f, FontStyle.Bold));
-            right.Controls.Add(MakeLabel("MUSICA DE FUNDO", new Point(20, 55), new Size(270, 20), colorMuted, 8f, FontStyle.Bold));
-            musicModeBox = MakeCombo(new Point(20, 79), new Size(270, 30), new[]
+            right.Controls.Add(MakeLabel("↗  TRATAMENTO FINAL", new Point(20, 18), new Size(262, 24), colorText, 9f, FontStyle.Bold));
+            right.Controls.Add(MakeLabel("Defina como a voz e a música serão entregues.", new Point(20, 44), new Size(262, 36), colorMuted, 8f, FontStyle.Regular));
+            right.Controls.Add(MakeLabel("MÚSICA DE FUNDO", new Point(20, 98), new Size(262, 20), colorMuted, 7.5f, FontStyle.Bold));
+            musicModeBox = MakeCombo(new Point(20, 121), new Size(262, 31), new[]
             {
-                "Video somente com voz",
-                "Manter musica (suave)",
-                "Deixar musica baixa - IA",
-                "Remover musica - IA"
+                "Vídeo somente com voz",
+                "Manter música (suave)",
+                "Deixar música baixa — IA",
+                "Remover música — IA"
             }, 0);
             musicModeBox.SelectedIndexChanged += delegate
             {
@@ -189,8 +207,8 @@ namespace VozUniformeApp
             uniformBox = new CheckBox
             {
                 Text = "Uniformizar todas as vozes",
-                Location = new Point(20, 132),
-                Size = new Size(270, 28),
+                Location = new Point(20, 178),
+                Size = new Size(262, 28),
                 Checked = true,
                 BackColor = colorCard,
                 ForeColor = colorText,
@@ -200,16 +218,20 @@ namespace VozUniformeApp
             };
             uniformBox.FlatAppearance.CheckedBackColor = colorAccent;
             right.Controls.Add(uniformBox);
-            right.Controls.Add(MakeLabel("A IA pode separar voz e musica antes de aplicar a limpeza e o volume final.", new Point(30, 190), new Size(250, 90), colorMuted, 8.5f, FontStyle.Regular));
-            startButton = MakeButton("MELHORAR AUDIO", new Point(20, 470), 270, colorGreen); right.Controls.Add(startButton);
-            clearButton = MakeButton("LIMPAR / PROXIMO", new Point(20, 520), 270, colorSecondary); right.Controls.Add(clearButton);
+            Panel aiNote = new Panel { Location = new Point(20, 226), Size = new Size(262, 112), BackColor = colorSurface };
+            RoundControl(aiNote, 10);
+            aiNote.Controls.Add(MakeLabel("ACELERAÇÃO INTELIGENTE", new Point(14, 12), new Size(234, 20), colorCyan, 7.5f, FontStyle.Bold));
+            aiNote.Controls.Add(MakeLabel("A GPU NVIDIA é usada automaticamente. Sem GPU compatível, o processamento continua pela CPU.", new Point(14, 38), new Size(234, 62), colorMuted, 8f, FontStyle.Regular));
+            right.Controls.Add(aiNote);
+            startButton = MakeButton("MELHORAR ÁUDIO", new Point(20, 438), 262, colorGreen); startButton.Height = 44; right.Controls.Add(startButton);
+            clearButton = MakeButton("LIMPAR / PRÓXIMO", new Point(20, 494), 262, colorSecondary); clearButton.Height = 36; right.Controls.Add(clearButton);
 
-            Panel footer = new Panel { Location = new Point(0, 668), Size = new Size(1180, 52), BackColor = colorHeader }; Controls.Add(footer);
-            statusDot = new Panel { Location = new Point(20, 21), Size = new Size(9, 9), BackColor = colorMuted }; footer.Controls.Add(statusDot);
-            statusLabel = MakeLabel("Selecione um video para comecar.", new Point(40, 13), new Size(690, 27), colorMuted, 9.5f, FontStyle.Regular); footer.Controls.Add(statusLabel);
-            statusBadge = MakeLabel("AGUARDANDO", new Point(735, 13), new Size(130, 27), colorMuted, 8f, FontStyle.Bold); statusBadge.TextAlign = ContentAlignment.MiddleRight; footer.Controls.Add(statusBadge);
-            cancelButton = MakeButton("CANCELAR", new Point(880, 6), 120, colorSecondary); cancelButton.Enabled = false; footer.Controls.Add(cancelButton);
-            Label original = MakeLabel("ORIGINAL PRESERVADO", new Point(1010, 13), new Size(150, 27), colorMuted, 8f, FontStyle.Bold); original.TextAlign = ContentAlignment.MiddleRight; footer.Controls.Add(original);
+            Panel footer = new Panel { Location = new Point(18, 654), Size = new Size(1144, 48), BackColor = colorHeader }; RoundControl(footer, 10); Controls.Add(footer);
+            statusDot = new Panel { Location = new Point(18, 20), Size = new Size(9, 9), BackColor = colorMuted }; RoundControl(statusDot, 5); footer.Controls.Add(statusDot);
+            statusLabel = MakeLabel("Selecione um vídeo para começar.", new Point(38, 11), new Size(620, 27), colorMuted, 8.5f, FontStyle.Regular); footer.Controls.Add(statusLabel);
+            statusBadge = MakeLabel("AGUARDANDO", new Point(650, 11), new Size(120, 27), colorMuted, 7.5f, FontStyle.Bold); statusBadge.TextAlign = ContentAlignment.MiddleRight; footer.Controls.Add(statusBadge);
+            cancelButton = MakeButton("CANCELAR", new Point(790, 7), 112, colorSecondary); cancelButton.Height = 34; cancelButton.Enabled = false; footer.Controls.Add(cancelButton);
+            Label original = MakeLabel("ORIGINAL PRESERVADO", new Point(920, 11), new Size(205, 27), colorMuted, 7.5f, FontStyle.Bold); original.TextAlign = ContentAlignment.MiddleRight; footer.Controls.Add(original);
 
             inputButton.Click += SelectInput;
             outputButton.Click += SelectOutput;
@@ -227,6 +249,13 @@ namespace VozUniformeApp
             return new Label { Text = text, Location = location, Size = size, ForeColor = color, Font = new Font("Segoe UI", fontSize, style) };
         }
 
+        private Panel MakeCard(Rectangle bounds)
+        {
+            Panel card = new Panel { Bounds = bounds, BackColor = colorCard };
+            RoundControl(card, 12);
+            return card;
+        }
+
         private Button MakeButton(string text, Point location, int width, Color backColor)
         {
             Button button = new Button
@@ -238,7 +267,7 @@ namespace VozUniformeApp
                 ForeColor = colorText,
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand,
-                Font = new Font("Segoe UI", 10f, FontStyle.Bold)
+                Font = new Font("Segoe UI Semibold", 9f, FontStyle.Bold)
             };
             button.FlatAppearance.BorderSize = 0;
             RoundControl(button, 10);
@@ -715,7 +744,7 @@ namespace VozUniformeApp
             stopwatch = null;
             timeLabel.Text = "Tempo  00:00:00";
             SetProgress(0);
-            SetStatus("Selecione um video para comecar.", "Idle");
+            SetStatus("Selecione um vídeo para começar.", "Idle");
             inputBox.Focus();
         }
 
@@ -746,7 +775,7 @@ namespace VozUniformeApp
             if (state == "Ready") SetStatusColors(colorAccent, "PRONTO");
             else if (state == "Processing") SetStatusColors(colorOrange, "PROCESSANDO");
             else if (state == "Success") SetStatusColors(colorGreen, "CONCLUIDO");
-            else if (state == "Error") SetStatusColors(colorAccent, "ERRO");
+            else if (state == "Error") SetStatusColors(colorDanger, "ERRO");
             else if (state == "Cancel") SetStatusColors(colorOrange, "CANCELADO");
             else SetStatusColors(colorMuted, "AGUARDANDO");
         }

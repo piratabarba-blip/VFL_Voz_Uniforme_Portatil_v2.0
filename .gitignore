@@ -7,6 +7,7 @@
 *.pdb
 bin/
 obj/
+build/
 third_party/
 
 # Arquivos temporários
