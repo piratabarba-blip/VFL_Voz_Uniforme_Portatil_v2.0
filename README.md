@@ -9,7 +9,7 @@ Aplicativo portátil para Windows que uniformiza o volume das falas, reduz ruíd
 ## Interface do programa
 
 <p align="center">
-  <img src="assets/interface-vfl-voz-uniforme.png" alt="Interface do VFL Voz Uniforme 2.0" width="900">
+  <img src="assets/interface-vfl-voz-uniforme.png" alt="Interface do VFL Voz Uniforme 2.1" width="900">
 </p>
 
 ## Apoie o projeto
